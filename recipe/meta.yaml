@@ -13,7 +13,7 @@ source:
 build:
   number: 0
   script: SETUPTOOLS_SCM_PRETEND_VERSION=${{ version }} ${{ PYTHON }} -m pip install . -v
-  skip: true  # [py<311]
+  skip: true  # [py<312]
 
 requirements:
   host:
@@ -25,6 +25,7 @@ requirements:
     - python
     - flexcache
     - flexparser
+    - platformdirs
     - typing_extensions
 
 test:
