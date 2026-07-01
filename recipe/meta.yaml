@@ -55,7 +55,7 @@ about:
     It supports a lot of numpy mathematical operations without monkey
     patching or wrapping numpy.
   dev_url: https://github.com/hgrecco/pint
-  doc_url: https://pint.readthedocs.org/
+  doc_url: https://pint.readthedocs.io
 
 extra:
   anaconda-services:
