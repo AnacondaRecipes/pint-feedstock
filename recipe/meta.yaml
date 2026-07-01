@@ -13,14 +13,13 @@ source:
 build:
   number: 0
   script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<312 or (win and py>=314)]
+  skip: true  # [py<312]
 
 requirements:
   host:
     - python
     - pip
-    - setuptools
-    - setuptools_scm
+    - hatchling
   run:
     - python
     - flexcache
