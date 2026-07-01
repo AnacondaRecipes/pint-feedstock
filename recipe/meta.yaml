@@ -12,7 +12,7 @@ source:
 
 build:
   number: 0
-  script: SETUPTOOLS_SCM_PRETEND_VERSION=${{ version }} ${{ PYTHON }} -m pip install . -v
+  script: SETUPTOOLS_SCM_PRETEND_VERSION={{ version }} ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   skip: true  # [py<312 or (win and py>=314)]
 
 requirements:
