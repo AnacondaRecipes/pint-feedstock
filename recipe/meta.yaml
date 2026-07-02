@@ -31,6 +31,8 @@ test:
   requires:
     - python
     - pip
+    - flexcache
+    - flexparser
   imports:
     - {{ name }}
   commands:
