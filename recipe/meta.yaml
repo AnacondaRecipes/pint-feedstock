@@ -12,6 +12,7 @@ source:
 build:
   number: 0
   skip: true  # [py<310]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
@@ -29,6 +30,7 @@ requirements:
 test:
   requires:
     - pip
+    - python
   imports:
     - pint
   commands:
