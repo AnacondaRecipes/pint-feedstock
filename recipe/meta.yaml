@@ -21,8 +21,8 @@ requirements:
     - hatch-vcs
   run:
     - python
-    - flexcache >=0.3
-    - flexparser >=0.4
+    - services::flexcache >=0.3
+    - services::flexparser >=0.4
     - platformdirs
     - typing-extensions
 
