@@ -6,6 +6,7 @@ build:
 
 channels:
   - defaults
+  - services
 
 upload:
   channel: services

@@ -1,103 +1,54 @@
 {% set name = "pint" %}
 {% set version = "0.26.1" %}
-{% set flexcache_version = "0.3" %}
-{% set flexparser_version = "0.4" %}
 
 package:
-  name: pint-bundle
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  - url: https://files.pythonhosted.org/packages/9f/bc/2c38c32e0fb1f966d3695f4493a3f3ce2cc0cca1bbe7c958b92261b31af9/pint-{{ version }}.tar.gz
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
     sha256: 1bbde36eae57a5a289cd05081c6405618a5899814940752064ce351cd0204f71
-    folder: pint
-  - url: https://files.pythonhosted.org/packages/55/b0/8a21e330561c65653d010ef112bf38f60890051d244ede197ddaa08e50c1/flexcache-{{ flexcache_version }}.tar.gz
-    sha256: 18743bd5a0621bfe2cf8d519e4c3bfdf57a269c15d1ced3fb4b64e0ff4600656
-    folder: flexcache
-  - url: https://files.pythonhosted.org/packages/82/99/b4de7e39e8eaf8207ba1a8fa2241dd98b2ba72ae6e16960d8351736d8702/flexparser-{{ flexparser_version }}.tar.gz
-    sha256: 266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2
-    folder: flexparser
 
 build:
   number: 0
+  skip: true  # [py<310]
 
-outputs:
-  - name: flexcache
-    version: {{ flexcache_version }}
-    script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-    build:
-      skip: true  # [py<312]
-    requirements:
-      host:
-        - python
-        - pip
-        - setuptools
-        - setuptools-scm
-      run:
-        - python
-        - typing-extensions
-    test:
-      requires:
-        - pip
-      imports:
-        - flexcache
-      commands:
-        - pip check
+requirements:
+  host:
+    - python
+    - pip
+    - hatchling
+    - hatch-vcs
+  run:
+    - python
+    - flexcache >=0.3
+    - flexparser >=0.4
+    - platformdirs
+    - typing-extensions
 
-  - name: flexparser
-    version: {{ flexparser_version }}
-    script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-    build:
-      skip: true  # [py<312]
-    requirements:
-      host:
-        - python
-        - pip
-        - setuptools
-        - setuptools-scm
-      run:
-        - python
-        - typing-extensions
-    test:
-      requires:
-        - pip
-      imports:
-        - flexparser
-      commands:
-        - pip check
-
-  - name: pint
-    version: {{ version }}
-    script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-    build:
-      skip: true  # [py<312]
-    requirements:
-      host:
-        - python
-        - pip
-        - hatchling
-        - hatch-vcs
-      run:
-        - python
-        - {{ pin_subpackage('flexcache', exact=True) }}
-        - {{ pin_subpackage('flexparser', exact=True) }}
-        - platformdirs
-        - typing-extensions
-    test:
-      requires:
-        - pip
-      imports:
-        - pint
-      commands:
-        - pip check
+test:
+  requires:
+    - pip
+  imports:
+    - pint
+  commands:
+    - pip check
 
 about:
   home: https://github.com/hgrecco/pint
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
-  summary: Physical quantities module (bundled with flexcache and flexparser)
-  description: Physical quantities module with vendored flexcache and flexparser dependencies.
+  summary: Operate and manipulate physical quantities in Python
+  description: |
+    Pint is a Python package to define, operate and manipulate physical
+    quantities: the product of a numerical value and a unit of measurement.
+    It allows arithmetic operations between them and conversions from and to
+    different units. It is distributed with a comprehensive list of physical
+    units, prefixes and constants. Due to its modular design, you can extend
+    (or even rewrite!) the complete list without changing the source code.
+    It supports a lot of numpy mathematical operations without monkey
+    patching or wrapping numpy.
   dev_url: https://github.com/hgrecco/pint
   doc_url: https://pint.readthedocs.io/
 
