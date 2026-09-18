@@ -24,7 +24,7 @@ build:
 outputs:
   - name: flexcache
     version: {{ flexcache_version }}
-    script: install_flexcache.sh
+    script: install_flexcache
     build:
       skip: true  # [py<312]
     requirements:
@@ -46,7 +46,7 @@ outputs:
 
   - name: flexparser
     version: {{ flexparser_version }}
-    script: install_flexparser.sh
+    script: install_flexparser
     build:
       skip: true  # [py<312]
     requirements:
@@ -68,7 +68,7 @@ outputs:
 
   - name: pint
     version: {{ version }}
-    script: install_pint.sh
+    script: install_pint
     build:
       skip: true  # [py<312]
     requirements:
