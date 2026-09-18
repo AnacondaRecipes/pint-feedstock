@@ -1,54 +1,101 @@
 {% set name = "pint" %}
-{% set version = "0.25.3" %}
+{% set version = "0.26.1" %}
+{% set flexcache_version = "0.3" %}
+{% set flexparser_version = "0.4" %}
 
 package:
-  name: {{ name }}
+  name: pint-bundle
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/P/Pint/pint-{{ version }}.tar.gz
-  sha256: f8f5df6cf65314d74da1ade1bf96f8e3e4d0c41b51577ac53c49e7d44ca5acee
+  - url: https://files.pythonhosted.org/packages/9f/bc/2c38c32e0fb1f966d3695f4493a3f3ce2cc0cca1bbe7c958b92261b31af9/pint-{{ version }}.tar.gz
+    sha256: 1bbde36eae57a5a289cd05081c6405618a5899814940752064ce351cd0204f71
+    folder: pint
+  - url: https://files.pythonhosted.org/packages/55/b0/8a21e330561c65653d010ef112bf38f60890051d244ede197ddaa08e50c1/flexcache-{{ flexcache_version }}.tar.gz
+    sha256: 18743bd5a0621bfe2cf8d519e4c3bfdf57a269c15d1ced3fb4b64e0ff4600656
+    folder: flexcache
+  - url: https://files.pythonhosted.org/packages/82/99/b4de7e39e8eaf8207ba1a8fa2241dd98b2ba72ae6e16960d8351736d8702/flexparser-{{ flexparser_version }}.tar.gz
+    sha256: 266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2
+    folder: flexparser
 
 build:
   number: 0
-  skip: true  # [py<312]
-  script: SETUPTOOLS_SCM_PRETEND_VERSION={{ version }} {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  entry_points:
-    - pint-convert = pint.pint_convert:main
 
-requirements:
-  host:
-    - python
-    - pip
-    - hatchling
-  run:
-    - python
-    - platformdirs >=2.1.0
-    - flexcache >=0.3
-    - flexparser >=0.4
-    - typing_extensions >=4.0.0
+outputs:
+  - name: flexcache
+    version: {{ flexcache_version }}
+    build:
+      skip: true  # [py<39]
+      script: cd flexcache && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python
+        - pip
+        - setuptools
+        - setuptools-scm
+      run:
+        - python
+        - typing-extensions
+    test:
+      imports:
+        - flexcache
 
-test:
-  requires:
-    - pip
-  imports:
-    - pint
-  commands:
-    - pip check
-    - pint-convert --help
+  - name: flexparser
+    version: {{ flexparser_version }}
+    build:
+      skip: true  # [py<39]
+      script: cd flexparser && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python
+        - pip
+        - setuptools
+        - setuptools-scm
+      run:
+        - python
+        - typing-extensions
+    test:
+      imports:
+        - flexparser
+
+  - name: pint
+    version: {{ version }}
+    build:
+      skip: true  # [py<312]
+      script: cd pint && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python
+        - pip
+        - hatchling
+        - hatch-vcs
+      run:
+        - python
+        - {{ pin_subpackage('flexcache', exact=True) }}
+        - {{ pin_subpackage('flexparser', exact=True) }}
+        - platformdirs
+        - typing-extensions
+    test:
+      requires:
+        - pip
+      imports:
+        - pint
+      commands:
+        - pip check
 
 about:
   home: https://github.com/hgrecco/pint
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
-  summary: Operate and manipulate physical quantities in Python
+  summary: Physical quantities module (bundled with flexcache and flexparser)
+  description: Physical quantities module with vendored flexcache and flexparser dependencies.
   dev_url: https://github.com/hgrecco/pint
-  doc_url: https://pint.readthedocs.org/
+  doc_url: https://pint.readthedocs.io/
 
 extra:
   anaconda-services:
     ref:
       - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
-    - amaloney
+    - anaconda-services
