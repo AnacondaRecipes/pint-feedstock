@@ -24,9 +24,9 @@ build:
 outputs:
   - name: flexcache
     version: {{ flexcache_version }}
+    script: install_flexcache.sh
     build:
       skip: true  # [py<39]
-      script: cd flexcache && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
@@ -37,14 +37,18 @@ outputs:
         - python
         - typing-extensions
     test:
+      requires:
+        - pip
       imports:
         - flexcache
+      commands:
+        - pip check
 
   - name: flexparser
     version: {{ flexparser_version }}
+    script: install_flexparser.sh
     build:
       skip: true  # [py<39]
-      script: cd flexparser && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
@@ -55,14 +59,18 @@ outputs:
         - python
         - typing-extensions
     test:
+      requires:
+        - pip
       imports:
         - flexparser
+      commands:
+        - pip check
 
   - name: pint
     version: {{ version }}
+    script: install_pint.sh
     build:
-      skip: true  # [py<312]
-      script: cd pint && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
+      skip: true  # [py<39]
     requirements:
       host:
         - python
@@ -99,4 +107,3 @@ extra:
       - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
     - anaconda-services
-
