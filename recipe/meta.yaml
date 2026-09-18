@@ -26,7 +26,7 @@ outputs:
     version: {{ flexcache_version }}
     build:
       skip: true  # [py<39]
-      script: cd flexcache && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+      script: cd flexcache && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
@@ -44,7 +44,7 @@ outputs:
     version: {{ flexparser_version }}
     build:
       skip: true  # [py<39]
-      script: cd flexparser && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+      script: cd flexparser && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
@@ -62,7 +62,7 @@ outputs:
     version: {{ version }}
     build:
       skip: true  # [py<312]
-      script: cd pint && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+      script: cd pint && $PYTHON -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
@@ -99,3 +99,4 @@ extra:
       - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
     - anaconda-services
+
