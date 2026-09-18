@@ -1,40 +1,42 @@
-{% set name = "Pint" %}
-{% set version = "0.20.1" %}
+{% set name = "pint" %}
+{% set version = "0.26.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 387cf04078dc7dfe4a708033baad54ab61d82ab06c4ee3d4922b1e45d5626067
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 1bbde36eae57a5a289cd05081c6405618a5899814940752064ce351cd0204f71
 
 build:
-  noarch: python
-  script: SETUPTOOLS_SCM_PRETEND_VERSION={{ version }} {{ PYTHON }} -m pip install . -v
   number: 0
+  skip: true  # [py<312]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  script_env:
+    - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
 
 requirements:
   host:
+    - python
     - pip
-    - python >=3.8
-    - setuptools >=45
-    - setuptools_scm >=3.4
-    - toml
-
+    - hatchling
+    - hatch-vcs
   run:
-    - python >=3.8
+    - python
+    - services::flexcache >=0.3
+    - services::flexparser >=0.4
+    - platformdirs
+    - typing-extensions
 
 test:
+  requires:
+    - pip
+    - python
   imports:
     - pint
   commands:
     - pip check
-    - python -c "import pint; ver = pint.__version__; assert ver != '0.0.0'"
-    - pint-convert --help
-  requires:
-    - pip
 
 about:
   home: https://github.com/hgrecco/pint
@@ -51,9 +53,12 @@ about:
     (or even rewrite!) the complete list without changing the source code.
     It supports a lot of numpy mathematical operations without monkey
     patching or wrapping numpy.
-  doc_url: https://pint.readthedocs.org/
   dev_url: https://github.com/hgrecco/pint
+  doc_url: https://pint.readthedocs.io/
 
 extra:
+  anaconda-services:
+    ref:
+      - https://anaconda.zendesk.com/agent/tickets/109074
   recipe-maintainers:
-    - dopplershift
+    - anaconda-services
